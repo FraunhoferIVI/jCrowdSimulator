@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>crowdSimulationUserInterface</name>
+
+	<groupId>de.fhg.ivi.crowdsimulation</groupId>
+	<artifactId>crowdsimui1</artifactId>
+	<version>2.0.0</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<!-- crowdSimulationLib -->
+		<dependency>
+			<groupId>de.fhg.ivi.crowdsimulation</groupId>
+			<artifactId>crowdsimlib1</artifactId>
+			<version>2.1.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.github.jiconfont/jiconfont -->
+		<!-- font awesome icons -->
+		<dependency>
+			<groupId>com.github.jiconfont</groupId>
+			<artifactId>jiconfont</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.github.jiconfont/jiconfont-font_awesome -->
+		<!-- font awesome icons -->
+		<dependency>
+			<groupId>com.github.jiconfont</groupId>
+			<artifactId>jiconfont-font_awesome</artifactId>
+			<version>4.7.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.github.jiconfont/jiconfont-swing -->
+		<!-- font awesome icons -->
+		<dependency>
+			<groupId>com.github.jiconfont</groupId>
+			<artifactId>jiconfont-swing</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+	</dependencies>
+
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass> de.fhg.ivi.crowdsimulation.ui.CrowdSimulation
+									</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
