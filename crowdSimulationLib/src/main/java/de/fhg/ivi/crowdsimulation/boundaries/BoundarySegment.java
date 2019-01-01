@@ -7,15 +7,25 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
 
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 
+/**
+ * A {@link BoundarySegment} is a part of a {@link Boundary} object. It references a
+ * {@link Geometry} object, which can be a {@link Point} or a {@link LineString} and a bounding box
+ *
+ * @author hahmann
+ *
+ */
 public class BoundarySegment
 {
 
     /**
      * Uses the object logger for printing specific messages in the console.
      */
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory
         .getLogger(MethodHandles.lookup().lookupClass());
 
@@ -25,11 +35,21 @@ public class BoundarySegment
     private Geometry            geometry;
 
     /**
-     * Caches {@link Geometry#getEnvelopeInternal()} of {@link Boundary#geometry} expanded by the
-     * maximum distance of interaction between a {@link Pedestrian} and a {@link Boundary}
+     * Caches {@link Geometry#getEnvelopeInternal()} of {@link BoundarySegment#geometry} expanded by
+     * the maximum distance of interaction between a {@link Pedestrian} and a {@link Boundary}
      */
     private Envelope            boundingBox;
 
+    /**
+     * Creates a new {@link BoundarySegment} object.
+     * <p>
+     * Furthermore computes an {@link Envelope}, which is computed from the {@code geometry}
+     * expanded by the given {@code maxBoundaryInteractionDistance}.
+     *
+     * @param geometry defines the geometry of the {@link BoundarySegment}
+     * @param maxBoundaryInteractionDistance maximum distance of interaction between a
+     *            {@link Pedestrian} and a {@link Boundary}
+     */
     public BoundarySegment(Geometry geometry, double maxBoundaryInteractionDistance)
     {
         this.geometry = geometry;

@@ -37,8 +37,9 @@ public class Boundary
         .getLogger(MethodHandles.lookup().lookupClass());
 
     /**
-     * The maximum length of segments contained in {@link #geometrySegments}. Given in meters.
+     * The maximum length of segments contained in {@link #boundarySegments}. Given in meters.
      */
+    @SuppressWarnings("unused")
     private final static int      MAX_SEGMENT_LENGTH = 10;
 
     /**
@@ -73,12 +74,12 @@ public class Boundary
     private Envelope              boundingBox;
 
     /**
-     * Creates a new {@link Geometry} of a {@link Boundary} object.
+     * Creates a new {@link Boundary} object from a given {@link Geometry} object.
      * <p>
      * Furthermore computes an {@link Envelope}, which is computed from the {@code geometry} plus
      * the given {@code maxBoundaryInteractionDistance}.
      *
-     * @param geometry defines the outline of the {@link Boundary}
+     * @param geometry defines the geometry of the {@link Boundary}
      * @param maxBoundaryInteractionDistance maximum distance of interaction between a
      *            {@link Pedestrian} and a {@link Boundary}
      */
@@ -131,8 +132,16 @@ public class Boundary
             }
             else if (segment instanceof LineString)
             {
-                // geometrySegments
-                // .addAll(GeometryTools.lineSplit((LineString) segment, MAX_SEGMENT_LENGTH));
+                // TODO: for the Dresden test case splitting into small segments seems to be slower
+                // than using big segments. however, for other scenarios this might not be the case
+
+                // List<LineString> splitSegments = GeometryTools.lineSplit((LineString) segment,
+                // MAX_SEGMENT_LENGTH);
+                // for (LineString splitSegment : splitSegments)
+                // {
+                // boundarySegments
+                // .add(new BoundarySegment(splitSegment, maxBoundaryInteractionDistance));
+                // }
                 boundarySegments.add(new BoundarySegment(segment, maxBoundaryInteractionDistance));
             }
         }
