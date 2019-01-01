@@ -15,7 +15,7 @@ This version is a runnable jar file that can be directly executed, if a Java Vir
 [Sample data](sampledata) to test the application is provided.
 
 ## Introduction
-Follow this introduction video to see, how the application can be used.
+Follow this introduction [video](https://www.youtube.com/watch?v=3-STrIbT4hE) to see, how the application can be used.
 
 ## Navigation
 + Use +/- buttons on the keyboard or the scrool wheel on the mouse to zoom in/out
