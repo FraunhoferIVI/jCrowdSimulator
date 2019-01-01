@@ -17,6 +17,8 @@ This version is a runnable jar file that can be directly executed, if a Java Vir
 ## Introduction
 Follow this introduction [video](https://www.youtube.com/watch?v=3-STrIbT4hE) to see, how the application can be used.
 
+[![jCrowdSimulator youtube intro](jCrowdSimulator_Intro.gif)](https://www.youtube.com/watch?v=3-STrIbT4hE)
+
 ## Navigation
 + Use +/- buttons on the keyboard or the scrool wheel on the mouse to zoom in/out
 + Use the arrow buttons (top, left, down, right) on the keyboard to move the map
