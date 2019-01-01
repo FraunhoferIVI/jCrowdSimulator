@@ -49,6 +49,7 @@ public class Quadtree
     /**
      * Uses the object logger for printing specific messages in the console.
      */
+    @SuppressWarnings("unused")
     private static final Logger                            logger = LoggerFactory
         .getLogger(MethodHandles.lookup().lookupClass());
 
