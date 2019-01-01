@@ -175,7 +175,7 @@ public class HelbingBuznaModelTest
         HelbingBuznaModel hbm = new HelbingBuznaModel();
 
         Vector2D resultingForce = hbm.interactBoundary(pedestrianThree.getCurrentPositionVector(),
-            boundary);
+            boundary.getBoundarySegments().get(0));
 
         // TODO test why boundaries and pedestrians don't interact with each other
         assertEquals(0.000, resultingForce.getX(), 0.001);

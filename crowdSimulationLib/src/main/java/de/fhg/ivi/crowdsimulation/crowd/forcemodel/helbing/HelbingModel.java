@@ -12,6 +12,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.ForceModel;
 import de.fhg.ivi.crowdsimulation.geom.GeometryTools;
@@ -130,7 +131,7 @@ public abstract class HelbingModel extends ForceModel
      *         {@link Pedestrian} with a {@code geometry}
      */
     @Override
-    public Vector2D interactBoundary(Vector2D currentPosition, Boundary boundary)
+    public Vector2D interactBoundary(Vector2D currentPosition, BoundarySegment boundary)
     {
         Vector2D forceDelta = new Vector2D(0, 0);
 

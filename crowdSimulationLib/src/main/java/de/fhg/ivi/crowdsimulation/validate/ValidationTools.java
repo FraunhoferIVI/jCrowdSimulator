@@ -15,6 +15,7 @@ import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulatorNotValidException;
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Crowd;
 import de.fhg.ivi.crowdsimulation.crowd.ICrowd;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
@@ -232,11 +233,11 @@ public class ValidationTools
                     positionOfFirstWayPoint };
                 LineString lineString = JTSFactoryFinder.getGeometryFactory()
                     .createLineString(coordinates);
-                List<Boundary> relevantBoundaries = tempQuadtree
-                    .getBoundaries(lineString.getEnvelopeInternal());
+                List<BoundarySegment> relevantBoundaries = tempQuadtree
+                    .getBoundarySegments(lineString.getEnvelopeInternal());
                 boolean visible = true;
 
-                for (Boundary boundary : relevantBoundaries)
+                for (BoundarySegment boundary : relevantBoundaries)
                 {
                     visible &= !lineString.intersects(boundary.getGeometry());
                     if ( !visible)
@@ -285,9 +286,9 @@ public class ValidationTools
             LineString lineString = factory.createLineString(coordinates);
 
             boolean visible = true;
-            List<Boundary> relevantBoundaries = tempQuadtree
-                .getBoundaries(lineString.getEnvelopeInternal());
-            for (Boundary boundary : relevantBoundaries)
+            List<BoundarySegment> relevantBoundaries = tempQuadtree
+                .getBoundarySegments(lineString.getEnvelopeInternal());
+            for (BoundarySegment boundary : relevantBoundaries)
             {
                 visible &= !lineString.intersects(boundary.getGeometry());
                 if ( !visible)

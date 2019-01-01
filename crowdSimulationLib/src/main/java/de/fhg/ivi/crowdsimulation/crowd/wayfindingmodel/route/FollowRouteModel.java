@@ -24,6 +24,7 @@ import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.numericintegration.NumericIntegrationTools;
 import de.fhg.ivi.crowdsimulation.crowd.wayfindingmodel.WayFindingModel;
@@ -889,7 +890,8 @@ public class FollowRouteModel extends WayFindingModel
 
             // only put into candidate points, if there is no intersection with boundaries
             // (if boundaries exist)
-            List<Boundary> boundaries = quadtree.getBoundaries(lineOfSight.getEnvelopeInternal());
+            List<BoundarySegment> boundaries = quadtree
+                .getBoundarySegments(lineOfSight.getEnvelopeInternal());
             if (boundaries == null || boundaries.isEmpty())
             {
                 if (distanceOriginPosition)
@@ -903,7 +905,7 @@ public class FollowRouteModel extends WayFindingModel
             else
             {
                 boolean lineOfSightIntersectBoundaries = false;
-                for (Boundary boundary : boundaries)
+                for (BoundarySegment boundary : boundaries)
                 {
                     lineOfSightIntersectBoundaries = lineOfSight.intersects(boundary.getGeometry());
                     if (lineOfSightIntersectBoundaries)

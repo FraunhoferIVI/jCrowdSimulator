@@ -7,6 +7,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Group;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.helbing.HelbingBuznaModel;
@@ -23,7 +24,7 @@ import de.fhg.ivi.crowdsimulation.crowd.forcemodel.moussaid.MoussaidModel;
  * Each ForceModel should implement forces for following interactions:
  * <ul>
  * <li>Pedestrian - Boundary (Obstacle),
- * {@link ForceModel#interactBoundary(Vector2D, Boundary)}</li>
+ * {@link ForceModel#interactBoundary(Vector2D, Geometry)}</li>
  * <li>Pedestrian - Pedestrian,
  * {@link ForceModel#interactPedestrian(Vector2D, Vector2D, Pedestrian)}</li>
  * <li>Pedestrian - Group,
@@ -136,7 +137,7 @@ public abstract class ForceModel
      * @return the {@link Vector2D} vector which resulting from the interaction of the current
      *         {@link Pedestrian} with a {@code geometry}
      */
-    public abstract Vector2D interactBoundary(Vector2D currentPosition, Boundary boundary);
+    public abstract Vector2D interactBoundary(Vector2D currentPosition, BoundarySegment boundary);
 
     /**
      * <b>Unfinished! - Computes wrong results!</b> Computes the force that results from the

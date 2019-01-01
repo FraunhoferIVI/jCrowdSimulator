@@ -1,18 +1,19 @@
 package de.fhg.ivi.crowdsimulation.boundaries;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
 
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
+import de.fhg.ivi.crowdsimulation.geom.GeometryTools;
 
 /**
  * A {@link Boundary} consists on a {@link Geometry}, which could be e.g. points, lines or polygons,
@@ -32,21 +33,30 @@ public class Boundary
     /**
      * Uses the object logger for printing specific messages in the console.
      */
-    private static final Logger logger = LoggerFactory
+    private static final Logger   logger             = LoggerFactory
         .getLogger(MethodHandles.lookup().lookupClass());
+
+    /**
+     * The maximum length of segments contained in {@link #geometrySegments}. Given in meters.
+     */
+    private final static int      MAX_SEGMENT_LENGTH = 10;
 
     /**
      * The {@link Geometry} object of this {@link Boundary}.
      */
-    private Geometry            geometry;
+    private Geometry              geometry;
+
+    /**
+     * The segments of {@link #geometry}. Each element is guaranteed to be not longer than
+     * {@value #MAX_SEGMENT_LENGTH} meters.
+     */
+    private List<BoundarySegment> boundarySegments;
 
     /**
      * The {@link Geometry} object containing a version of {@link #geometry} with an applied buffer
      * of .
      */
-    private Geometry            bufferedGeometry;
-
-    private List<LineString>    lineStrings;
+    private Geometry              bufferedGeometry;
 
     /**
      * Distance value to be applied on {@link #geometry} to get {@link #bufferedGeometry}.
@@ -54,27 +64,13 @@ public class Boundary
      * Defines the minimum distance to a Boundary that {@link Pedestrian} will use to look for
      * target points. Given in meters.
      */
-    private double              boundaryDistance;
-
-    /**
-     * Sets the distance value to be applied on {@link #geometry} to get {@link #bufferedGeometry}.
-     * <p>
-     * Reason behind this is to provide a version of the {@link #geometry} of this Boundary that
-     * allows to consider some distance (={@code boundaryDistance}) to the Boundary. Given in
-     * meters.
-     *
-     * @param boundaryDistance the distance given in meters
-     */
-    public void setBoundaryDistance(double boundaryDistance)
-    {
-        this.boundaryDistance = boundaryDistance;
-    }
+    private double                boundaryDistance;
 
     /**
      * Caches {@link Geometry#getEnvelopeInternal()} of {@link Boundary#geometry} expanded by the
      * maximum distance of interaction between a {@link Pedestrian} and a {@link Boundary}
      */
-    private Envelope boundingBox;
+    private Envelope              boundingBox;
 
     /**
      * Creates a new {@link Geometry} of a {@link Boundary} object.
@@ -104,7 +100,7 @@ public class Boundary
      * @param boundaryDistance the minimum distance to a Boundary that {@link Pedestrian} will use
      *            to look for target points. Given in meters.
      */
-    public Boundary(Geometry geometry, double maxBoundaryInteractionDistance,
+    private Boundary(Geometry geometry, double maxBoundaryInteractionDistance,
         double boundaryDistance) throws GeometryNotValidException
     {
         // can happen, if POLYGON EMPTY or MULTIPOLYGON EMPTY geometries are given
@@ -124,13 +120,21 @@ public class Boundary
         this.geometry = geometry;
 
         // split geometry into individual linestrings
-        // TODO this could be a method in GeometryTools
-        for (int i = 1; i < geometry.getCoordinates().length; i++ )
+        List<? extends Geometry> segments = GeometryTools.toSegments(geometry);
+        for (Geometry segment : segments)
         {
-            LineString lineString = JTSFactoryFinder.getGeometryFactory()
-                .createLineString(new Coordinate[] { geometry.getCoordinates()[i - 1],
-                    geometry.getCoordinates()[i] });
-            // lineStrings.add(lineString);
+            if (boundarySegments == null)
+                boundarySegments = new ArrayList<>();
+            if (segment instanceof Point)
+            {
+                boundarySegments.add(new BoundarySegment(segment, maxBoundaryInteractionDistance));
+            }
+            else if (segment instanceof LineString)
+            {
+                // geometrySegments
+                // .addAll(GeometryTools.lineSplit((LineString) segment, MAX_SEGMENT_LENGTH));
+                boundarySegments.add(new BoundarySegment(segment, maxBoundaryInteractionDistance));
+            }
         }
         this.boundaryDistance = boundaryDistance;
         this.boundingBox = geometry.getEnvelopeInternal();
@@ -175,16 +179,40 @@ public class Boundary
     }
 
     /**
-     * Gets a cached version of {@link Geometry#getEnvelopeInternal()} of {@link Boundary#geometry}
-     * expanded by the maximum distance of interaction between a {@link Pedestrian} and a
-     * {@link Boundary}.
+     * Gets a cached version of {@link Geometry#getEnvelopeInternal()} of {@link #geometry} expanded
+     * by the maximum distance of interaction between a {@link Pedestrian} and a {@link Boundary}.
      *
-     * @return a cached version of {@link Geometry#getEnvelopeInternal()} of
-     *         {@link Boundary#geometry} expanded by the maximum distance of interaction between a
-     *         {@link Pedestrian} and a {@link Boundary}
+     * @return a cached version of {@link Geometry#getEnvelopeInternal()} of {@link #geometry}
+     *         expanded by the maximum distance of interaction between a {@link Pedestrian} and a
+     *         {@link Boundary}
      */
     public Envelope getBoundingBox()
     {
         return boundingBox;
+    }
+
+    /**
+     * Sets the distance value to be applied on {@link #geometry} to get {@link #bufferedGeometry}.
+     * <p>
+     * Reason behind this is to provide a version of the {@link #geometry} of this Boundary that
+     * allows to consider some distance (={@code boundaryDistance}) to the Boundary. Given in
+     * meters.
+     *
+     * @param boundaryDistance the distance given in meters
+     */
+    public void setBoundaryDistance(double boundaryDistance)
+    {
+        this.boundaryDistance = boundaryDistance;
+    }
+
+    /**
+     * Gets the {@link List} of segments of {@link #geometry}. Each element is guaranteed to be not
+     * longer than {@value #MAX_SEGMENT_LENGTH} meters.
+     *
+     * @return the segments of this {@link Boundary} object.
+     */
+    public List<BoundarySegment> getBoundarySegments()
+    {
+        return boundarySegments;
     }
 }

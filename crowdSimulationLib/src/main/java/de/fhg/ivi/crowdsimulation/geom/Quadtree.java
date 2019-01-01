@@ -11,6 +11,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Crowd;
 import de.fhg.ivi.crowdsimulation.crowd.ICrowd;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
@@ -60,6 +61,11 @@ public class Quadtree
      * A {@link Quadtree} to index {@link Boundary} objects
      */
     private com.vividsolutions.jts.index.quadtree.Quadtree quadtreeBoundaries;
+
+    /**
+     * A {@link Quadtree} to index segments of {@link Boundary} objects
+     */
+    private com.vividsolutions.jts.index.quadtree.Quadtree quadtreeBoundarySegments;
 
     /**
      * Creates a new {@link Quadtree} object
@@ -116,35 +122,6 @@ public class Quadtree
     }
 
     /**
-     * Creates a new tree structure for {@link Boundary} objects ({@link #quadtreeBoundaries}) and
-     * adds all {@link Boundary} objects given in {@code boundaries}. By this all previously
-     * contained objects in the tree will be removed. Boundary objects with invalid {@link Geometry}
-     * are tried to be fixed by applying {@link Geometry#buffer(double)} with zero size buffer.
-     *
-     * @param boundaries a {@link List} of {@link Boundary} objects that are added a newly created
-     *            tree structure for {@link Boundary} objects
-     */
-    public void updateBoundaries(List<Boundary> boundaries)
-    {
-        quadtreeBoundaries = new com.vividsolutions.jts.index.quadtree.Quadtree();
-        if (boundaries != null && !boundaries.isEmpty())
-        {
-            for (Boundary boundary : boundaries)
-            {
-                Geometry g = boundary.getGeometry();
-                if ( !g.isValid())
-                {
-                    logger.info(
-                        "geometry is invalid. trying to apply buffer with zero size to fix. geometry="
-                            + g);
-                    boundary.setGeometry(g.buffer(0));
-                }
-                quadtreeBoundaries.insert(boundary.getBoundingBox(), boundary);
-            }
-        }
-    }
-
-    /**
      * Adds all {@link Boundary} objects contained in the given list of {@code boundaries} to the
      * existing tree structure of boundaries ({@link #quadtreeBoundaries}). {@link Boundary} objects
      * that are already contained in the existing tree structure will not be removed from the tree
@@ -158,11 +135,21 @@ public class Quadtree
     {
         if (quadtreeBoundaries == null)
             quadtreeBoundaries = new com.vividsolutions.jts.index.quadtree.Quadtree();
+        if (quadtreeBoundarySegments == null)
+            quadtreeBoundarySegments = new com.vividsolutions.jts.index.quadtree.Quadtree();
         if (boundaries != null && !boundaries.isEmpty())
         {
             for (Boundary boundary : boundaries)
             {
                 quadtreeBoundaries.insert(boundary.getBoundingBox(), boundary);
+                if (boundary.getBoundarySegments() != null
+                    && boundary.getBoundarySegments().size() > 0)
+                {
+                    for (BoundarySegment segment : boundary.getBoundarySegments())
+                    {
+                        quadtreeBoundarySegments.insert(segment.getBoundingBox(), segment);
+                    }
+                }
             }
         }
     }
@@ -209,7 +196,6 @@ public class Quadtree
      *
      * @param searchEnvelope the envelope of the desired query area.
      * @return a List of {@link Boundary} which may intersect the search envelope or {@code null},
-     *         if {@link #updateBoundaries(List)} has not yet been called
      */
     public List<Boundary> getBoundaries(Envelope searchEnvelope)
     {
@@ -218,5 +204,27 @@ public class Quadtree
         if (searchEnvelope == null)
             return null;
         return quadtreeBoundaries.query(searchEnvelope);
+    }
+
+    /**
+     * Queries the {@link Quadtree} and returns segments of {@link Boundary} objects which
+     * <b>may</b> lie in the given search envelope. Precisely, the items that are returned are all
+     * items in the tree whose envelope <b>may</b> intersect the search Envelope. Note that some
+     * items with non-intersecting envelopes may be returned as well; the client is responsible for
+     * filtering these out. In most situations there will be many items in the tree which do not
+     * intersect the search envelope and which are not returned - thus providing improved
+     * performance over a simple linear scan.
+     *
+     * @param searchEnvelope the envelope of the desired query area.
+     * @return a List of segments of {@link Boundary} objects, which may intersect the search
+     *         envelope or {@code null},
+     */
+    public List<BoundarySegment> getBoundarySegments(Envelope searchEnvelope)
+    {
+        if (quadtreeBoundarySegments == null)
+            return null;
+        if (searchEnvelope == null)
+            return null;
+        return quadtreeBoundarySegments.query(searchEnvelope);
     }
 }

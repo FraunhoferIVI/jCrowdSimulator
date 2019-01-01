@@ -2,6 +2,7 @@ package de.fhg.ivi.crowdsimulation.geom;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -545,14 +546,51 @@ public class GeometryTools
     }
 
     /**
-     * taken from
+     * Creates a {@link List} of {@link Geometry} objects (usually of type {@link LineString}) that
+     * represents segments that are created using consecutive {@link Coordinate} objects from the
+     * given {@code geometry} objects.
+     * <p>
+     * If {@code geometry} is {@code null} or contains zero points, {@code null} is returned.
+     * <p>
+     * If {@code geometry} contains only 1 {@link Coordinate}, a {@link List} containing only the
+     * given {@code geometry} object is returned.
+     *
+     * @param geometry the Geometry object to be used to create line segments
+     * @return a {@link List} of {@link Geometry} objects representing Line segments
+     */
+    public static List<? extends Geometry> toSegments(Geometry geometry)
+    {
+        if (geometry == null)
+            return null;
+        if (geometry.getCoordinates().length == 0)
+            return null;
+        if (geometry.getCoordinates().length == 1)
+            return Arrays.asList(geometry);
+
+        ArrayList<LineString> lineStrings = new ArrayList<>();
+        for (int i = 1; i < geometry.getCoordinates().length; i++ )
+        {
+            LineString lineString = JTSFactoryFinder.getGeometryFactory()
+                .createLineString(new Coordinate[] { geometry.getCoordinates()[i - 1],
+                    geometry.getCoordinates()[i] });
+            lineStrings.add(lineString);
+        }
+        return lineStrings;
+    }
+
+    /**
+     * Creates a {@link List} of {@link LineString} objects created from the given
+     * {@code lineString} object with each object guaranteed to be not longer than {@code length}
+     * meters.
+     * <p>
+     * Taken from
      * https://stackoverflow.com/questions/33549915/how-to-split-linestring-into-parts-every-x-meters-with-java-jts
      *
-     * @param lineString
-     * @param meters
-     * @return
+     * @param lineString the {@link LineString} object to be split into small segments
+     * @param length given in meters
+     * @return a {@link List} of {@link LineString} objects
      */
-    public static List<LineString> lineSplit(LineString lineString, double meters)
+    public static List<LineString> lineSplit(LineString lineString, double length)
     {
         List<LineString> results = new ArrayList<>();
         List<LineSegment> segments = new ArrayList<>();
@@ -578,10 +616,10 @@ public class GeometryTools
         for (int i = 0; i < segments.size(); i++ )
         {
             LineSegment seg = segments.get(i);
-            neededLength = meters - remainLength;
+            neededLength = length - remainLength;
             remainLength += seg.getLength();
             netxStartPoint = seg.p0;
-            while (remainLength >= meters)
+            while (remainLength >= length)
             {
                 remainCoors.add(netxStartPoint);
                 Coordinate endPoint = seg.pointAlong(neededLength / seg.getLength());
@@ -598,8 +636,8 @@ public class GeometryTools
                     .createLineString(remainCoors.toArray(new Coordinate[remainCoors.size()])));
                 remainCoors = new ArrayList<>();
                 netxStartPoint = endPoint;
-                remainLength -= meters;
-                neededLength += meters;
+                remainLength -= length;
+                neededLength += length;
             }
             remainCoors.add(netxStartPoint);
             remainCoors.add(seg.p1);

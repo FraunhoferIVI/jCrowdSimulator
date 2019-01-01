@@ -13,6 +13,7 @@ import com.vividsolutions.jts.geom.TopologyException;
 import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.wayfindingmodel.route.WayPoint;
 import de.fhg.ivi.crowdsimulation.geom.Quadtree;
@@ -295,14 +296,14 @@ public abstract class WayFindingModel implements QuadtreeAccess
             .createLineString(coordinates);
 
         // checks if the Pedestrian sees its next Waypoint.
-        List<Boundary> boundaries = null;
+        List<BoundarySegment> boundaries = null;
         if (quadtree != null)
-            boundaries = quadtree.getBoundaries(lineOfSight.getEnvelopeInternal());
+            boundaries = quadtree.getBoundarySegments(lineOfSight.getEnvelopeInternal());
 
         boolean lineOfSightIntersectsBoundary = false;
         if (boundaries != null && !boundaries.isEmpty())
         {
-            for (Boundary boundary : boundaries)
+            for (BoundarySegment boundary : boundaries)
             {
                 // accurate check
                 try
@@ -319,6 +320,7 @@ public abstract class WayFindingModel implements QuadtreeAccess
                 }
 
             }
+
         }
         return !lineOfSightIntersectsBoundary;
     }

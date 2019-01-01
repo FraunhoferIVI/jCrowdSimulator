@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.ForceModel;
 import de.fhg.ivi.crowdsimulation.geom.Quadtree;
@@ -74,9 +75,9 @@ public class SemiImplicitEulerIntegrator extends NumericIntegrator
             .add(updatedVelocity.multiply(simulationInterval));
 
         // validated updated position - guaranteed not to go through a boundary
-        List<Boundary> boundaries = null;
+        List<BoundarySegment> boundaries = null;
         if (quadtree != null)
-            boundaries = quadtree.getBoundaries(
+            boundaries = quadtree.getBoundarySegments(
                 new Envelope(currentPosition.toCoordinate(), updatedPosition.toCoordinate()));
         updatedPosition = NumericIntegrationTools.validateMove(pedestrian, boundaries,
             currentPosition, updatedPosition);

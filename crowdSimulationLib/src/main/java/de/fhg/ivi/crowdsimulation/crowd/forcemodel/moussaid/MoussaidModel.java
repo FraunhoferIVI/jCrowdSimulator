@@ -5,7 +5,7 @@ import java.util.List;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.math.Vector2D;
 
-import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.ForceModel;
 
@@ -44,7 +44,7 @@ public class MoussaidModel extends ForceModel
     }
 
     @Override
-    public Vector2D interactBoundary(Vector2D currentPosition, Boundary boundary)
+    public Vector2D interactBoundary(Vector2D currentPosition, BoundarySegment boundary)
     {
         return null;
     }

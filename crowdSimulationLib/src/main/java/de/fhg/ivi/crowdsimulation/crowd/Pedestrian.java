@@ -13,6 +13,7 @@ import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulator;
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.ForceModel;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.numericintegration.NumericIntegrator;
 import de.fhg.ivi.crowdsimulation.crowd.forcemodel.numericintegration.RungeKuttaIntegrator;
@@ -657,13 +658,13 @@ public class Pedestrian implements Clusterable, Cloneable, QuadtreeAccess, Ident
 
         Envelope searchEnvelope = getEnvelope();
         searchEnvelope.expandBy(forceModel.getMaxPedestrianInteractionDistance());
-        List<Boundary> boundaries = null;
+        List<BoundarySegment> boundaries = null;
         if (quadtree != null)
-            boundaries = quadtree.getBoundaries(searchEnvelope);
+            boundaries = quadtree.getBoundarySegments(searchEnvelope);
 
         if (boundaries != null && !boundaries.isEmpty())
         {
-            for (Boundary boundary : boundaries)
+            for (BoundarySegment boundary : boundaries)
             {
                 // original calculation method
                 resultingForce = resultingForce

@@ -13,6 +13,7 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
+import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.geom.GeometryTools;
 import de.fhg.ivi.crowdsimulation.math.MathTools;
@@ -97,12 +98,12 @@ public class NumericIntegrationTools
      * @return the validated position of the {@link Pedestrian} (either {@code oldPosition} or
      *         {@code newPosition}).
      */
-    static Vector2D validateMove(Pedestrian pedestrian, List<Boundary> boundaries,
+    static Vector2D validateMove(Pedestrian pedestrian, List<BoundarySegment> boundaries,
         Vector2D oldPosition, Vector2D newPosition)
     {
         if (boundaries != null && !boundaries.isEmpty())
         {
-            for (Boundary boundary : boundaries)
+            for (BoundarySegment boundary : boundaries)
             {
                 // this move would cross a boundary
                 if (moveCrossesGeometry(boundary.getBoundingBox(), boundary.getGeometry(),

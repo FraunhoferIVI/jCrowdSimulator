@@ -343,14 +343,14 @@ public class CrowdSimulation extends JFrame
             // false);
 
             // debug data for johansson's modeling approach
-            // loadCrowd(new File("src/main/resources/data/debuggingFiles/testTwoJoh2707.shp"),
-            // false);
+            // loadCrowdAndRoute(new File("src/main/resources/data/debug/debugOnePedTop.csv"),
+            // new File("src/main/resources/data/dresden/waypoints1.shp"), Color.BLUE, false);
 
             // test data dresden prager strasse
             loadCrowdAndRoute(new File("src/main/resources/data/dresden/crowd1.shp"),
                 new File("src/main/resources/data/dresden/waypoints1.shp"), Color.BLUE, false);
-            loadCrowdAndRoute(new File("src/main/resources/data/dresden/crowd2.shp"),
-                new File("src/main/resources/data/dresden/waypoints2.shp"), Color.RED, false);
+            // loadCrowdAndRoute(new File("src/main/resources/data/dresden/crowd2.shp"),
+            // new File("src/main/resources/data/dresden/waypoints2.shp"), Color.RED, false);
             loadBoundaries(new File("src/main/resources/data/dresden/boundaries.shp"), false);
 
             // test data berlin airport schoenefeld
