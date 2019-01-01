@@ -349,8 +349,8 @@ public class CrowdSimulation extends JFrame
             // test data dresden prager strasse
             loadCrowdAndRoute(new File("src/main/resources/data/dresden/crowd1.shp"),
                 new File("src/main/resources/data/dresden/waypoints1.shp"), Color.BLUE, false);
-            // loadCrowdAndRoute(new File("src/main/resources/data/dresden/crowd2.shp"),
-            // new File("src/main/resources/data/dresden/waypoints2.shp"), Color.RED, false);
+            loadCrowdAndRoute(new File("src/main/resources/data/dresden/crowd2.shp"),
+                new File("src/main/resources/data/dresden/waypoints2.shp"), Color.RED, false);
             loadBoundaries(new File("src/main/resources/data/dresden/boundaries.shp"), false);
 
             // test data berlin airport schoenefeld
