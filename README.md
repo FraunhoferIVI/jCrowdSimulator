@@ -6,7 +6,7 @@ jCrowdSimulator is a crowd simulation library and user interface written in Java
 + Point/Line/Polygon data can be used to define obstacles
 + The outline of crowd can be computed
 + Resulting forces within the simulation can be visualised
-+ The simulation library may run independently from the user interface
++ The simulation library may be used independently from the user interface
 
 ## Download
 The current version of jCrowdSimulator can be downloaded here: [jCrowdSimulator.jar](jCrowdSimulator.jar).
@@ -16,6 +16,11 @@ This version is a runnable jar file that can be directly executed, if a Java Vir
 
 ## Introduction
 Follow this introduction video to see, how the application can be used.
+
+## Navigation
++ Use +/- buttons on the keyboard or the scrool wheel on the mouse to zoom in/out
++ Use the arrow buttons (top, left, down, right) on the keyboard to move the map
+
 
 ## License
 Both, the simulation library and the user interface are under [LGPL v3](https://opensource.org/licenses/lgpl-3.0.html). Thus, they can be used and further developed. Forking and contributing is welcome.
