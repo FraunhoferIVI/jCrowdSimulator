@@ -24,7 +24,7 @@ import de.fhg.ivi.crowdsimulation.crowd.forcemodel.moussaid.MoussaidModel;
  * Each ForceModel should implement forces for following interactions:
  * <ul>
  * <li>Pedestrian - Boundary (Obstacle),
- * {@link ForceModel#interactBoundary(Vector2D, Geometry)}</li>
+ * {@link ForceModel#interactBoundary(Vector2D, BoundarySegment)}</li>
  * <li>Pedestrian - Pedestrian,
  * {@link ForceModel#interactPedestrian(Vector2D, Vector2D, Pedestrian)}</li>
  * <li>Pedestrian - Group,
