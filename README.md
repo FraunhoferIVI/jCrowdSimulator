@@ -1,5 +1,5 @@
 # jCrowdSimulator
-jCrowdSimulator is a crowd simulation library and user interface written in Java. Implements the Social Force Model of [Helbing et al. (2005)](https://pubsonline.informs.org/doi/pdf/10.1287/trsc.1040.0108) / [Helbing et al. 1995](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.51.4282). It supports the [ESRI Shape Format](https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf) and the [OGC Well Known Text Format](https://www.opengeospatial.org/standards/wkt-crs), which can be used to define crowds (point data) and associated routes (point data) they should follow as well as obstacles (point/line/polygon data) that the agents of the crowd try to avoid.
+jCrowdSimulator is a crowd simulation library and user interface written in [Java](https://www.java.com/). It implements the Social Force Model of [Helbing et al. (2005)](https://pubsonline.informs.org/doi/pdf/10.1287/trsc.1040.0108) / [Helbing et al. 1995](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.51.4282). It supports the [ESRI Shape Format](https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf) and the [OGC Well Known Text Format](https://www.opengeospatial.org/standards/wkt-crs), which can be used to define crowds (point data) and associated routes (point data) they should follow as well as obstacles (point/line/polygon data) that the agents of the crowd try to avoid. Geometry data is handled using [JTS](https://en.wikipedia.org/wiki/JTS_Topology_Suite) / [GeoTools](http://www.geotools.org/) libraries.
 
 ## Features
 + Multiple crowds, each having an individual route can be simulated simultaneously
@@ -15,9 +15,9 @@ This version is a runnable jar file that can be directly executed, if a Java Vir
 [Sample data](sampledata) to test the application is provided.
 
 ## Introduction
-Follow this introduction [video](https://www.youtube.com/watch?v=3-STrIbT4hE) to see, how the application can be used.
+Follow this introduction [video](https://youtu.be/u9ifUezyPl8) to see, how the application can be used.
 
-[![jCrowdSimulator youtube intro](jCrowdSimulator_Intro.gif)](https://www.youtube.com/watch?v=3-STrIbT4hE)
+[![jCrowdSimulator youtube intro](jCrowdSimulatorIntro.gif)](https://youtu.be/u9ifUezyPl8)
 
 ## Navigation
 + Use +/- buttons on the keyboard or the scrool wheel on the mouse to zoom in/out
