@@ -15,9 +15,9 @@ This version is a runnable jar file that can be directly executed, if a Java Vir
 [Sample data](sampledata) to test the application is provided.
 
 ## Introduction
-Follow this introduction [video](https://youtu.be/Off51B2xxdA) to see, how the application can be used.
+Follow this introduction [video](https://youtu.be/1Pn2VdOSdPw) to see, how the application can be used.
 
-[![jCrowdSimulator youtube intro](jCrowdSimulatorIntro.gif)](https://youtu.be/Off51B2xxdA)
+[![jCrowdSimulator youtube intro](jCrowdSimulatorIntro.gif)](https://youtu.be/1Pn2VdOSdPw)
 
 ## Navigation
 + Use +/- buttons on the keyboard or the scrool wheel on the mouse to zoom in/out
