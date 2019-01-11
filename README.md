@@ -4,7 +4,7 @@ jCrowdSimulator is a crowd simulation library and user interface written in [Jav
 ## Features
 + Multiple crowds, each having an individual route can be simulated simultaneously
 + Point/Line/Polygon data can be used to define obstacles
-+ The outline of crowd can be computed
++ The outline of crowds can be computed
 + Resulting forces within the simulation can be visualised
 + The simulation library may be used independently from the user interface
 
@@ -26,3 +26,6 @@ Follow this introduction [video](https://youtu.be/1Pn2VdOSdPw) to see, how the a
 
 ## License
 Both, the simulation library and the user interface are under [LGPL v3](https://opensource.org/licenses/lgpl-3.0.html). Thus, they can be used and further developed. Forking and contributing is welcome.
+
+## Credits
+The initial version of this software has been developed at Fraunhofer IVI, Fraunhofer Institute for Transportation and Infrastructure Systems, Dresden. Contact: s t e f a n . h a h m a n n(at)ivi.fraunhofer.de (without the whitespaces).
