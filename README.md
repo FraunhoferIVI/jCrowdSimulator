@@ -29,5 +29,8 @@ Both, the simulation library and the user interface are under [LGPL v3](https://
 
 ## Credits
 The initial version of this software has been developed at [Fraunhofer IVI, Fraunhofer Institute for Transportation and Infrastructure Systems](https://www.ivi.fraunhofer.de/en.html), Dresden.
+
+Contact: s t e f a n . h a h m a n n (at) i v i . f r a u n h o f e r . d e (without the whitespaces).
+
+
 [![Fraunhofer IVI](ivi.svg)](https://www.ivi.fraunhofer.de/en.html)
- Contact: s t e f a n . h a h m a n n (at) i v i . f r a u n h o f e r . d e (without the whitespaces).
