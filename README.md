@@ -33,6 +33,10 @@ The initial version of this software has been developed at [Fraunhofer IVI, Frau
 Contact: s t e f a n . h a h m a n n (at) i v i . f r a u n h o f e r . d e (without the whitespaces).
 
 
-[![Fraunhofer IVI](ivi.svg)](https://www.ivi.fraunhofer.de/en.html)    
-[![TARGET project](target.png)](http://www.target-h2020.eu/)    
+---
+
+[![Fraunhofer IVI](ivi.svg)](https://www.ivi.fraunhofer.de/en.html)
+
+[![TARGET project](target.png)](http://www.target-h2020.eu/)
+    
 [![TARGET project](ech2020.png)](https://ec.europa.eu/programmes/horizon2020/en/)
