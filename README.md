@@ -28,9 +28,11 @@ Follow this introduction [video](https://youtu.be/1Pn2VdOSdPw) to see, how the a
 Both, the simulation library and the user interface are under [LGPL v3](https://opensource.org/licenses/lgpl-3.0.html). Thus, they can be used and further developed. Forking and contributing is welcome.
 
 ## Credits
-The initial version of this software has been developed at [Fraunhofer IVI, Fraunhofer Institute for Transportation and Infrastructure Systems](https://www.ivi.fraunhofer.de/en.html), Dresden.
+The initial version of this software has been developed at [Fraunhofer IVI, Fraunhofer Institute for Transportation and Infrastructure Systems](https://www.ivi.fraunhofer.de/en.html), Dresden during the project [TARGET](http://www.target-h2020.eu/), which received funding from the European Commission within the Horizon 2020 programme (grant number 653350).
 
 Contact: s t e f a n . h a h m a n n (at) i v i . f r a u n h o f e r . d e (without the whitespaces).
 
 
 [![Fraunhofer IVI](ivi.svg)](https://www.ivi.fraunhofer.de/en.html)
+[![TARGET project](target.png)](http://www.target-h2020.eu/)
+[![TARGET project](ech2020.png)](https://ec.europa.eu/programmes/horizon2020/en/)
