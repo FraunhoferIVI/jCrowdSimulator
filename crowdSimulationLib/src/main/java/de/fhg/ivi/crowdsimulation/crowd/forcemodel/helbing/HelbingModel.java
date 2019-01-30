@@ -33,6 +33,10 @@ import de.fhg.ivi.crowdsimulation.math.MathTools;
  *      "https://journals.aps.org/pre/abstract/10.1103/PhysRevE.51.4282">https://journals.aps.org/pre/abstract/10.1103/PhysRevE.51.4282</a>
  * @see <a href=
  *      "https://pubsonline.informs.org/doi/abs/10.1287/trsc.1040.0108">https://pubsonline.informs.org/doi/abs/10.1287/trsc.1040.0108</a>
+ * 
+ *      TODO: add support for headed social force model (=extension of classic social force model)
+ * @see <a href=
+ *      "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0169734">https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0169734</a>
  *
  * @author hahmann/meinert
  *
