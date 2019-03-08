@@ -32,7 +32,7 @@ The initial version of this software has been developed at [Fraunhofer IVI, Frau
 
 ## Publication
 If you use this software in scientific contexts, please cite:
-Meinert, A., Hahmann, S., Brausewetter, P. & Kopf, S. (2019): Simulation von Menschenmengen im urbanen Umfeld mit OpenStreetMap-Daten. vol. 32, iss. 1, pp. 17–29. (English title: Crowd simulation in urban areas with openstreetmap data)
++ `Meinert, A., Hahmann, S., Brausewetter, P. & Kopf, S. (2019): Simulation von Menschenmengen im urbanen Umfeld mit OpenStreetMap-Daten. vol. 32, iss. 1, pp. 17–29. (English title: Crowd simulation in urban areas with openstreetmap data)`
 
 + Access to article (free access starting 4/2020): [gispoint.de](https://gispoint.de/artikelarchiv/gis/2019/gisscience-ausgabe-12019/4669-simulation-von-menschenmengen-im-urbanen-umfeld-mit-openstreetmap-daten.html)
 + Author version (i.e. pre-print): [pre-print.pdf](Preprint_Meinert_Hahmann_Brausewetter_Kopf.pdf)
