@@ -59,6 +59,8 @@ import de.fhg.ivi.crowdsimulation.validate.ValidationTools;
  * @see CrowdSimulatorNotValidException
  *
  * @author hahmann/meinert
+ *
+ *         TODO: build exe with https://gerardnico.com/maven/exe
  */
 public class CrowdSimulator<T extends ICrowd> implements Runnable
 {
