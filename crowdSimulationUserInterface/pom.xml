@@ -11,8 +11,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>12</maven.compiler.source>
-		<maven.compiler.target>12</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -82,6 +82,52 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- build exe with launch4j plugin - experimentell -->
+			<!-- 
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>1.7.16</version>
+				<executions>
+					<execution>
+						<id>l4j-clui</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+							<headerType>console</headerType>
+							<outfile>target/${exeFileName}.exe</outfile>
+							<jar>target/${jarFileName}.jar</jar>
+							<errTitle>encc</errTitle>
+							<classPath>
+								<mainClass>myPackage.myMainClass</mainClass>
+								<addDependencies>true</addDependencies>
+								<preCp>anything</preCp>
+							</classPath>
+							<jre>
+								<minVersion>${version.jre.launch4j}</minVersion>
+								<opts>
+									<opt>-Djava.endorsed.dirs=./endorsed</opt>
+								</opts>
+							</jre>
+							<versionInfo>
+								<fileVersion>${launch4jVersion}</fileVersion>
+								<txtFileVersion>${launch4jVersion}</txtFileVersion>
+								<fileDescription>${project.name}</fileDescription>
+								<copyright>MIT</copyright>
+								<productVersion>${launch4jVersion}</productVersion>
+								<txtProductVersion>${launch4jVersion}</txtProductVersion>
+								<productName>${project.name}</productName>
+								<originalFilename>${exeFileName}.exe</originalFilename>
+								<internalName>${exeFileName}</internalName>
+							</versionInfo>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			 -->
 		</plugins>
+
 	</build>
 </project>
