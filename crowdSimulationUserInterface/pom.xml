@@ -11,6 +11,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mainClass>de.fhg.ivi.crowdsimulation.ui.CrowdSimulation</mainClass>
+		<executableFileName>jCrowdSimulator</executableFileName>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
@@ -69,21 +71,19 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass> de.fhg.ivi.crowdsimulation.ui.CrowdSimulation
-									</mainClass>
+									<mainClass>${mainClass}</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>jCrowdSimulator</finalName>
+							<finalName>${executableFileName}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<!-- build exe with launch4j plugin - experimentell -->
-			<!-- 
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
@@ -97,37 +97,35 @@
 						</goals>
 						<configuration>
 							<headerType>console</headerType>
-							<outfile>target/${exeFileName}.exe</outfile>
-							<jar>target/${jarFileName}.jar</jar>
+							<outfile>${project.build.directory}/${executableFileName}.exe</outfile>
+							<jar>${project.build.directory}/${executableFileName}.jar</jar>
 							<errTitle>encc</errTitle>
 							<classPath>
-								<mainClass>myPackage.myMainClass</mainClass>
+								<mainClass>${mainClass}</mainClass>
 								<addDependencies>true</addDependencies>
 								<preCp>anything</preCp>
 							</classPath>
 							<jre>
-								<minVersion>${version.jre.launch4j}</minVersion>
+								<minVersion>1.8.0</minVersion>
 								<opts>
 									<opt>-Djava.endorsed.dirs=./endorsed</opt>
 								</opts>
 							</jre>
 							<versionInfo>
-								<fileVersion>${launch4jVersion}</fileVersion>
-								<txtFileVersion>${launch4jVersion}</txtFileVersion>
+								<fileVersion>${project.version}.0</fileVersion>
+								<txtFileVersion>${project.version}.0</txtFileVersion>
 								<fileDescription>${project.name}</fileDescription>
-								<copyright>MIT</copyright>
-								<productVersion>${launch4jVersion}</productVersion>
-								<txtProductVersion>${launch4jVersion}</txtProductVersion>
-								<productName>${project.name}</productName>
-								<originalFilename>${exeFileName}.exe</originalFilename>
-								<internalName>${exeFileName}</internalName>
+								<copyright>LGPL</copyright>
+								<productVersion>${project.version}.0</productVersion>
+								<txtProductVersion>${project.version}.0</txtProductVersion>
+								<productName>${executableFileName}</productName>
+								<originalFilename>${executableFileName}.exe</originalFilename>
+								<internalName>${project.name}</internalName>
 							</versionInfo>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			 -->
 		</plugins>
-
 	</build>
 </project>
