@@ -17,13 +17,13 @@ import org.opensphere.geometry.algorithm.ConcaveHull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiPoint;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.geom.TopologyException;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.TopologyException;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulatorNotValidException;
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
@@ -611,7 +611,7 @@ public class Crowd implements ICrowd, Identifiable
      * this Crowd are converted to {@link Coordinate} objects and added to a {@link MultiPoint}
      * object.
      *
-     * @see com.vividsolutions.jts.geom.Geometry#getCentroid()
+     * @see org.locationtech.jts.geom.Geometry#getCentroid()
      *
      * @return the centroid of this {@link Crowd} as {@link MultiPoint}
      */

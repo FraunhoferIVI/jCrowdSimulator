@@ -11,19 +11,19 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineSegment;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.math.Vector2D;
-import com.vividsolutions.jts.operation.linemerge.LineMerger;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateList;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineSegment;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.math.Vector2D;
+import org.locationtech.jts.operation.linemerge.LineMerger;
 
 import de.fhg.ivi.crowdsimulation.math.MathTools;
 
@@ -118,28 +118,28 @@ public class GeometryTools
 
     /**
      * Gets a line at {@code centerPoint} perpendicular to the direction defined by
-     * {@link com.vividsolutions.jts.math.Vector2D} normalized direction vector.
+     * {@link org.locationtech.jts.math.Vector2D} normalized direction vector.
      * <p>
      * The width of this line is specified by the {@code length}.
      *
      * @param centerPoint is the first {@link Coordinate}, which serves as the center point of the
      *            perpendicular line
-     * @param normalizedDirectionVector a {@link com.vividsolutions.jts.math.Vector2D} pointing
+     * @param normalizedDirectionVector a {@link org.locationtech.jts.math.Vector2D} pointing
      * @param length defines the length of the perpendicular line
      *
      * @return a perpendicular line as {@link Geometry}
      */
     public static Geometry getPerpendicularLine(Coordinate centerPoint,
-        com.vividsolutions.jts.math.Vector2D normalizedDirectionVector, double length)
+        org.locationtech.jts.math.Vector2D normalizedDirectionVector, double length)
     {
         if (centerPoint == null || normalizedDirectionVector == null || length == 0)
             return null;
         length /= 2d;
         // rotate with 90 degrees + set length to specified meters
-        com.vividsolutions.jts.math.Vector2D perpendicularVector90 = normalizedDirectionVector
+        org.locationtech.jts.math.Vector2D perpendicularVector90 = normalizedDirectionVector
             .multiply(length).rotateByQuarterCircle(1);
         // rotate with 270 degrees + set length to specified meters
-        com.vividsolutions.jts.math.Vector2D perpendicularVector270 = normalizedDirectionVector
+        org.locationtech.jts.math.Vector2D perpendicularVector270 = normalizedDirectionVector
             .multiply(length).rotateByQuarterCircle(3);
 
         // create coordinate[] for creating LineStrings
@@ -185,25 +185,25 @@ public class GeometryTools
     public static Geometry getPerpendicularLine(Coordinate centerPoint, Coordinate orientationPoint,
         double length)
     {
-        com.vividsolutions.jts.math.Vector2D normalizedDirectionVector = getNormalizedDirection(
+        org.locationtech.jts.math.Vector2D normalizedDirectionVector = getNormalizedDirection(
             centerPoint, orientationPoint);
         return getPerpendicularLine(centerPoint, normalizedDirectionVector, length);
     }
 
     /**
-     * Gets a normalized direction {@link com.vividsolutions.jts.math.Vector2D} indicating the
+     * Gets a normalized direction {@link org.locationtech.jts.math.Vector2D} indicating the
      * direction from {@code centerPoint} to {@code orientationPoint}
      *
      * @param centerPoint
      * @param orientationPoint
      * @return
      */
-    public static com.vividsolutions.jts.math.Vector2D getNormalizedDirection(
+    public static org.locationtech.jts.math.Vector2D getNormalizedDirection(
         Coordinate centerPoint, Coordinate orientationPoint)
     {
         if (centerPoint.equals(orientationPoint))
             return null;
-        return new com.vividsolutions.jts.math.Vector2D(centerPoint, orientationPoint).normalize();
+        return new org.locationtech.jts.math.Vector2D(centerPoint, orientationPoint).normalize();
     }
 
     /**

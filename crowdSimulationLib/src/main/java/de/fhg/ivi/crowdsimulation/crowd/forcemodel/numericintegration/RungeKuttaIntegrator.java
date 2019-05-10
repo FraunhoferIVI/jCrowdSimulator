@@ -2,8 +2,8 @@ package de.fhg.ivi.crowdsimulation.crowd.forcemodel.numericintegration;
 
 import java.util.List;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.math.Vector2D;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
 import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;

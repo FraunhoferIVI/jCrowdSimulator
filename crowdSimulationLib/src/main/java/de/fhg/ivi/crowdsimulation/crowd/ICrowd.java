@@ -7,8 +7,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.opensphere.geometry.algorithm.ConcaveHull;
 
-import com.vividsolutions.jts.algorithm.ConvexHull;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.algorithm.ConvexHull;
+import org.locationtech.jts.geom.Geometry;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulatorNotValidException;
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;

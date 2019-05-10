@@ -7,7 +7,7 @@ import org.apache.commons.math3.util.FastMath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.math.Vector2D;
+import org.locationtech.jts.math.Vector2D;
 
 /**
  * Class for providing helping methods in case of mathematical functions. There are several

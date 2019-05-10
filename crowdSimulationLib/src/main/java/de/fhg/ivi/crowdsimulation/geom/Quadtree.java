@@ -7,8 +7,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
 import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
@@ -56,17 +56,17 @@ public class Quadtree
     /**
      * A {@link Quadtree} to index {@link Pedestrian} objects
      */
-    private com.vividsolutions.jts.index.quadtree.Quadtree quadtreePedestrians;
+    private org.locationtech.jts.index.quadtree.Quadtree quadtreePedestrians;
 
     /**
      * A {@link Quadtree} to index {@link Boundary} objects
      */
-    private com.vividsolutions.jts.index.quadtree.Quadtree quadtreeBoundaries;
+    private org.locationtech.jts.index.quadtree.Quadtree quadtreeBoundaries;
 
     /**
      * A {@link Quadtree} to index segments of {@link Boundary} objects
      */
-    private com.vividsolutions.jts.index.quadtree.Quadtree quadtreeBoundarySegments;
+    private org.locationtech.jts.index.quadtree.Quadtree quadtreeBoundarySegments;
 
     /**
      * Creates a new {@link Quadtree} object
@@ -87,7 +87,7 @@ public class Quadtree
      */
     private void updatePedestrians(List<Pedestrian> pedestrians)
     {
-        quadtreePedestrians = new com.vividsolutions.jts.index.quadtree.Quadtree();
+        quadtreePedestrians = new org.locationtech.jts.index.quadtree.Quadtree();
         if (pedestrians != null && !pedestrians.isEmpty())
         {
             for (Pedestrian pedestrian : pedestrians)
@@ -135,9 +135,9 @@ public class Quadtree
     public void addBoundaries(List<Boundary> boundaries)
     {
         if (quadtreeBoundaries == null)
-            quadtreeBoundaries = new com.vividsolutions.jts.index.quadtree.Quadtree();
+            quadtreeBoundaries = new org.locationtech.jts.index.quadtree.Quadtree();
         if (quadtreeBoundarySegments == null)
-            quadtreeBoundarySegments = new com.vividsolutions.jts.index.quadtree.Quadtree();
+            quadtreeBoundarySegments = new org.locationtech.jts.index.quadtree.Quadtree();
         if (boundaries != null && !boundaries.isEmpty())
         {
             for (Boundary boundary : boundaries)

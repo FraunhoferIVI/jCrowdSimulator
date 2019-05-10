@@ -5,8 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.math.Vector2D;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.crowd.Pedestrian;
 import de.fhg.ivi.crowdsimulation.crowd.wayfindingmodel.WayFindingModel;

@@ -2,9 +2,9 @@ package de.fhg.ivi.crowdsimulation.crowd.forcemodel;
 
 import java.util.List;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.math.Vector2D;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.math.Vector2D;
 
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
 import de.fhg.ivi.crowdsimulation.boundaries.BoundarySegment;
