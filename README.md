@@ -9,8 +9,10 @@ jCrowdSimulator is a crowd simulation library and user interface written in [Jav
 + The simulation library may be used independently from the user interface
 
 ## Download
-The current version of jCrowdSimulator can be downloaded here: [jCrowdSimulator.jar](jCrowdSimulator.jar).
-This version is a runnable jar file that can be directly executed, if a Java Virtual Machine is installed.
+The current version of jCrowdSimulator can be downloaded here:
++ Executable jar file [jCrowdSimulator.jar](jCrowdSimulator.jar). This is a runnable jar file that can be directly executed, if a Java Virtual Machine / JDK (mininum 1.8.0) is installed.
++ Executable exe file for Windows [jCrowdSimulator.exe](jCrowdSimulator.exe). Since currently no JDK is delivered with the application, the executable can only be run, if a Java Virtual Machine / JDK (minimum 1.8.0) is installed.
+
 
 [Sample data](sampledata) to test the application is provided.
 
