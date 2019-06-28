@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.io.FilenameUtils;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
@@ -58,11 +60,8 @@ public class DataTools
      *
      * @return {@link List} of {@link Geometry} objects
      */
-    public static List<Geometry> loadGeometriesFromFile(File file)
+    public static List<Geometry> loadGeometriesFromFile(@Nonnull File file)
     {
-        if (file == null)
-            return null;
-
         List<Geometry> geometries = null;
 
         try
@@ -96,7 +95,7 @@ public class DataTools
      *
      * @return {@link List} of {@link Geometry} objects
      */
-    public static List<Geometry> loadGeometriesFromCsvFile(File file)
+    public static List<Geometry> loadGeometriesFromCsvFile(@Nonnull File file)
     {
         ArrayList<Geometry> loadedGeometries = new ArrayList<>();
         WKTReader reader = new WKTReader();
@@ -125,7 +124,7 @@ public class DataTools
         catch (RuntimeException e)
         {
             if (e.getCause() instanceof FileNotFoundException)
-                logger.debug("csv file not found:", file == null ? "null" : file.getAbsolutePath());
+                logger.debug("csv file not found:", file.getAbsolutePath());
         }
         catch (FileNotFoundException e)
         {
@@ -154,7 +153,7 @@ public class DataTools
      *
      * @return {@link List} of {@link Geometry} objects
      */
-    public static List<Geometry> loadGeometriesFromShapeFile(File file)
+    public static List<Geometry> loadGeometriesFromShapeFile(@Nonnull File file)
     {
         ArrayList<Geometry> loadedGeometries = null;
         try
@@ -185,8 +184,7 @@ public class DataTools
         catch (RuntimeException e)
         {
             if (e.getCause() instanceof FileNotFoundException)
-                logger.debug("shapefile not found:",
-                    file == null ? "null" : file.getAbsolutePath());
+                logger.debug("shapefile not found:", file.getAbsolutePath());
         }
         catch (FileNotFoundException e)
         {
@@ -207,7 +205,7 @@ public class DataTools
      *
      * @return the {@link CoordinateReferenceSystem} of the {@link File}
      */
-    public static CoordinateReferenceSystem getCRSFromFile(File file)
+    public static CoordinateReferenceSystem getCRSFromFile(@Nonnull File file)
     {
         if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("shp"))
         {
@@ -239,7 +237,7 @@ public class DataTools
      * @return the {@link CoordinateReferenceSystem} from the a SRID obtained from {@code geometry}
      *         or {@code null} if not matching {@link CoordinateReferenceSystem} has been found
      */
-    public static CoordinateReferenceSystem getCRSFromGeometry(Geometry geometry)
+    public static CoordinateReferenceSystem getCRSFromGeometry(@Nonnull Geometry geometry)
     {
         int srid = geometry.getSRID();
         CoordinateReferenceSystem crs = null;

@@ -20,15 +20,14 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.opengis.geometry.BoundingBox;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.opengis.geometry.BoundingBox;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulator;
 import de.fhg.ivi.crowdsimulation.CrowdSimulatorNotValidException;
@@ -466,27 +465,30 @@ public class CrowdSimulation extends JFrame
             VisualCrowd crowd = crowdSimulator.createVisualCrowd(pedestrians, ignoreInvalid,
                 crowdColor);
 
-            // waypoint geometries
-            List<Geometry> wayPointGeometries = DataTools.loadGeometriesFromFile(routeFile);
-
-            // only use wayPoints if the List<> isn't null or empty
-            if (wayPointGeometries != null && !wayPointGeometries.isEmpty())
+            if (routeFile != null)
             {
-                // get crs of route file
-                CoordinateReferenceSystem crsRouteFile = DataTools.getCRSFromFile(routeFile);
+                // waypoint geometries
+                List<Geometry> wayPointGeometries = DataTools.loadGeometriesFromFile(routeFile);
 
-                if (crsPedestriansFile != null && crsRouteFile != null
-                    && !crsPedestriansFile.equals(crsRouteFile))
+                // only use wayPoints if the List<> isn't null or empty
+                if (wayPointGeometries != null && !wayPointGeometries.isEmpty())
                 {
-                    throw new CrowdSimulatorNotValidException(
-                        "Datasets with different Coordinate Reference Systems are loaded, pedestrians:"
-                            + crsPedestriansFile + " != route:" + crsRouteFile);
-                }
+                    // get crs of route file
+                    CoordinateReferenceSystem crsRouteFile = DataTools.getCRSFromFile(routeFile);
 
-                Route route = crowdSimulator.getRouteFactory()
-                    .createRouteFromGeometries(wayPointGeometries);
-                crowd.setRoute(route, crowdSimulator.getFastForwardClock().currentTimeMillis(),
-                    ignoreInvalid);
+                    if (crsPedestriansFile != null && crsRouteFile != null
+                        && !crsPedestriansFile.equals(crsRouteFile))
+                    {
+                        throw new CrowdSimulatorNotValidException(
+                            "Datasets with different Coordinate Reference Systems are loaded, pedestrians:"
+                                + crsPedestriansFile + " != route:" + crsRouteFile);
+                    }
+
+                    Route route = crowdSimulator.getRouteFactory()
+                        .createRouteFromGeometries(wayPointGeometries);
+                    crowd.setRoute(route, crowdSimulator.getFastForwardClock().currentTimeMillis(),
+                        ignoreInvalid);
+                }
             }
 
             // set crs
