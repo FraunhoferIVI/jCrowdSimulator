@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.geotools.geometry.jts.JTSFactoryFinder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.MultiPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.ivi.crowdsimulation.crowd.wayfindingmodel.route.Route;
 import de.fhg.ivi.crowdsimulation.crowd.wayfindingmodel.route.WayPoint;
@@ -151,7 +150,7 @@ public class Group
 
         // compute centroid if more than one pedestrian belongs to the group
         MultiPoint mp = JTSFactoryFinder.getGeometryFactory()
-            .createMultiPoint(Crowd.getCoordinatesFromPedestrians(pedestrians));
+            .createMultiPointFromCoords(Crowd.getCoordinatesFromPedestrians(pedestrians));
         this.centroid = mp.getCentroid().getCoordinate();
     }
 

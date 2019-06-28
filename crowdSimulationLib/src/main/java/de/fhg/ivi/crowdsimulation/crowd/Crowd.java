@@ -13,10 +13,6 @@ import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.geotools.geometry.jts.JTSFactoryFinder;
-import org.opensphere.geometry.algorithm.ConcaveHull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -24,6 +20,9 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.TopologyException;
+import org.opensphere.geometry.algorithm.ConcaveHull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulatorNotValidException;
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
@@ -399,7 +398,7 @@ public class Crowd implements ICrowd, Identifiable
                         points.get(i).getPoint()[1]);
                 }
                 MultiPoint multiPointCluster = JTSFactoryFinder.getGeometryFactory()
-                    .createMultiPoint(coordinates);
+                    .createMultiPointFromCoords(coordinates);
 
                 Geometry crowdOutline = createOutline(multiPointCluster, isCrowdOutlineConvex,
                     CONCAVE_HULL_THRESHOLD);
@@ -411,7 +410,7 @@ public class Crowd implements ICrowd, Identifiable
         {
             // gets position of all pedestrians as MultiPoint object
             MultiPoint multiPoint = JTSFactoryFinder.getGeometryFactory()
-                .createMultiPoint(Crowd.getCoordinatesFromPedestrians(pedestrians));
+                .createMultiPointFromCoords(Crowd.getCoordinatesFromPedestrians(pedestrians));
             Geometry crowdOutline = createOutline(multiPoint, isCrowdOutlineConvex,
                 CONCAVE_HULL_THRESHOLD);
             ArrayList<Geometry> tempCrowdOutlines = new ArrayList<>();
@@ -619,7 +618,8 @@ public class Crowd implements ICrowd, Identifiable
     {
         List<Pedestrian> pedestrians = getPedestrians(true);
         Coordinate[] coordinates = getCoordinates().toArray(new Coordinate[pedestrians.size()]);
-        MultiPoint mp = JTSFactoryFinder.getGeometryFactory().createMultiPoint(coordinates);
+        MultiPoint mp = JTSFactoryFinder.getGeometryFactory()
+            .createMultiPointFromCoords(coordinates);
         return mp.getCentroid();
     }
 
