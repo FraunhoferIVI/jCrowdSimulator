@@ -29,14 +29,13 @@ import javax.swing.JPanel;
 
 import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.geometry.jts.JTSFactoryFinder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.locationtech.jts.awt.ShapeWriter;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.math.Vector2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.ivi.crowdsimulation.CrowdSimulator;
 import de.fhg.ivi.crowdsimulation.analysis.Grid;
@@ -960,7 +959,7 @@ public class Map extends JPanel
             }
             catch (NullPointerException e)
             {
-                logger.debug("bounding box=null");
+                logger.debug("cannot set map origin due to missing bounding box");
             }
         }
         // skip, if the current map origin is unknown

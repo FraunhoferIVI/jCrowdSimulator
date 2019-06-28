@@ -64,24 +64,17 @@ public class DataTools
     {
         List<Geometry> geometries = null;
 
-        try
+        if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("csv"))
         {
-            if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("csv"))
-            {
-                geometries = loadGeometriesFromCsvFile(file);
-            }
-            else if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("shp"))
-            {
-                geometries = loadGeometriesFromShapeFile(file);
-            }
-            else
-            {
-                logger.error("Unsupported Filetype: " + FilenameUtils.getExtension(file.getName()));
-            }
+            geometries = loadGeometriesFromCsvFile(file);
         }
-        catch (NullPointerException e)
+        else if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("shp"))
         {
-            logger.error("Given file is null.", e);
+            geometries = loadGeometriesFromShapeFile(file);
+        }
+        else
+        {
+            logger.error("Unsupported Filetype: " + FilenameUtils.getExtension(file.getName()));
         }
 
         return geometries;
@@ -116,7 +109,7 @@ public class DataTools
                 }
                 catch (ParseException ex)
                 {
-                    logger.warn("wkt could not be parsed. WKT=", wkt, ex);
+                    logger.warn("wkt could not be parsed. WKT={}", wkt, ex);
                 }
             }
             csvReader.close();
@@ -124,15 +117,15 @@ public class DataTools
         catch (RuntimeException e)
         {
             if (e.getCause() instanceof FileNotFoundException)
-                logger.debug("csv file not found:", file.getAbsolutePath());
+                logger.debug("csv file not found {}", file.getAbsolutePath());
         }
         catch (FileNotFoundException e)
         {
-            logger.debug("csv file not found:", file.getAbsolutePath());
+            logger.debug("csv file not found {}", file.getAbsolutePath());
         }
         catch (IOException e)
         {
-            logger.debug("error reading csv file:", file.getAbsolutePath(), e);
+            logger.debug("error reading csv file {}", file.getAbsolutePath(), e);
         }
         finally
         {
@@ -184,15 +177,15 @@ public class DataTools
         catch (RuntimeException e)
         {
             if (e.getCause() instanceof FileNotFoundException)
-                logger.debug("shapefile not found:", file.getAbsolutePath());
+                logger.debug("shapefile not found: {}", file.getPath());
         }
         catch (FileNotFoundException e)
         {
-            logger.debug("shapefile not found:", file.getAbsolutePath());
+            logger.debug("shapefile not found: {}", file.getPath());
         }
         catch (IOException e)
         {
-            logger.debug("error reading shapefile:", file.getAbsolutePath(), e);
+            logger.debug("error reading shapefile: {}", file.getPath(), e);
         }
 
         return loadedGeometries;
@@ -247,7 +240,7 @@ public class DataTools
         }
         catch (FactoryException e)
         {
-            logger.error("unknown srid=" + srid, e);
+            logger.error("unknown srid {}", srid, e);
         }
 
         return crs;
