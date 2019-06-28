@@ -27,11 +27,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.opensphere.geometry.triangulation.DoubleComparator;
-import org.opensphere.geometry.triangulation.model.Edge;
-import org.opensphere.geometry.triangulation.model.Triangle;
-import org.opensphere.geometry.triangulation.model.Vertex;
-
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
@@ -48,6 +43,10 @@ import org.locationtech.jts.triangulate.quadedge.QuadEdge;
 import org.locationtech.jts.triangulate.quadedge.QuadEdgeSubdivision;
 import org.locationtech.jts.triangulate.quadedge.QuadEdgeTriangle;
 import org.locationtech.jts.util.UniqueCoordinateArrayFilter;
+import org.opensphere.geometry.triangulation.DoubleComparator;
+import org.opensphere.geometry.triangulation.model.Edge;
+import org.opensphere.geometry.triangulation.model.Triangle;
+import org.opensphere.geometry.triangulation.model.Vertex;
 
 /**
  * Computes a concave hull of a {@link Geometry} which is a concave {@link Geometry} that contains
@@ -71,19 +70,19 @@ public class ConcaveHull
 
     private double                       threshold;
 
-    public HashMap<LineSegment, Integer> segments     = new HashMap<LineSegment, Integer>();
+    public HashMap<LineSegment, Integer> segments     = new HashMap<>();
 
-    public HashMap<Integer, Edge>        edges        = new HashMap<Integer, Edge>();
+    public HashMap<Integer, Edge>        edges        = new HashMap<>();
 
-    public HashMap<Integer, Triangle>    triangles    = new HashMap<Integer, Triangle>();
+    public HashMap<Integer, Triangle>    triangles    = new HashMap<>();
 
-    public TreeMap<Integer, Edge>        lengths      = new TreeMap<Integer, Edge>();
+    public TreeMap<Integer, Edge>        lengths      = new TreeMap<>();
 
-    public HashMap<Integer, Edge>        shortLengths = new HashMap<Integer, Edge>();
+    public HashMap<Integer, Edge>        shortLengths = new HashMap<>();
 
-    public HashMap<Coordinate, Integer>  coordinates  = new HashMap<Coordinate, Integer>();
+    public HashMap<Coordinate, Integer>  coordinates  = new HashMap<>();
 
-    public HashMap<Integer, Vertex>      vertices     = new HashMap<Integer, Vertex>();
+    public HashMap<Integer, Vertex>      vertices     = new HashMap<>();
 
     /**
      * Create a new concave hull construction for the input {@link Geometry}.
@@ -135,9 +134,10 @@ public class ConcaveHull
     }
 
     /**
-     * Transform into GeometryCollection.
+     * Transforms a given {@link GeometryCollection} into a new {@link GeometryCollection} that
+     * consists only unique {@link Point} objects
      *
-     * @param geom input geometry
+     * @param gc input {@link GeometryCollection} object
      * @return a geometry collection
      */
     private static GeometryCollection transformIntoPointGeometryCollection(GeometryCollection gc)
@@ -215,9 +215,9 @@ public class ConcaveHull
         }
 
         // border
-        List<QuadEdge> qeFrameBorder = new ArrayList<QuadEdge>();
-        List<QuadEdge> qeFrame = new ArrayList<QuadEdge>();
-        List<QuadEdge> qeBorder = new ArrayList<QuadEdge>();
+        List<QuadEdge> qeFrameBorder = new ArrayList<>();
+        List<QuadEdge> qeFrame = new ArrayList<>();
+        List<QuadEdge> qeBorder = new ArrayList<>();
 
         for (QuadEdge qe : quadEdges)
         {
@@ -247,14 +247,14 @@ public class ConcaveHull
             qes.delete(qe);
         }
 
-        HashMap<QuadEdge, Double> qeDistances = new HashMap<QuadEdge, Double>();
+        HashMap<QuadEdge, Double> qeDistances = new HashMap<>();
         for (QuadEdge qe : quadEdges)
         {
             qeDistances.put(qe, qe.toLineSegment().getLength());
         }
 
         DoubleComparator dc = new DoubleComparator(qeDistances);
-        TreeMap<QuadEdge, Double> qeSorted = new TreeMap<QuadEdge, Double>(dc);
+        TreeMap<QuadEdge, Double> qeSorted = new TreeMap<>(dc);
         qeSorted.putAll(qeDistances);
 
         // edges creation
@@ -361,6 +361,8 @@ public class ConcaveHull
 
             if (index != -1)
             {
+                if (e == null)
+                    continue;
                 Triangle triangle = e.getTriangles().get(0);
                 List<Triangle> neighbours = triangle.getNeighbours();
                 // irregular triangle test
@@ -500,22 +502,22 @@ public class ConcaveHull
         }
 
         // concave hull creation
-        List<LineString> edges = new ArrayList<LineString>();
+        List<LineString> tempEdges = new ArrayList<>();
         for (Edge e : this.lengths.values())
         {
             LineString l = e.getGeometry().toGeometry(this.geomFactory);
-            edges.add(l);
+            tempEdges.add(l);
         }
 
         for (Edge e : this.shortLengths.values())
         {
             LineString l = e.getGeometry().toGeometry(this.geomFactory);
-            edges.add(l);
+            tempEdges.add(l);
         }
 
         // merge
         LineMerger lineMerger = new LineMerger();
-        lineMerger.add(edges);
+        lineMerger.add(tempEdges);
         LineString merge = (LineString) lineMerger.getMergedLineStrings().iterator().next();
 
         if (merge.isRing())
