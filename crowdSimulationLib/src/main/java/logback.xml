@@ -8,7 +8,7 @@
 		</filter>
 		 -->
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} \(%file:%line\) - %msg %n</pattern>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %logger{35} \(%file:%line\) - %m%n</pattern>
 		</encoder>
 	</appender>
 
@@ -16,7 +16,7 @@
 
 	
 	<root>
-		<level value="INFO" />
+		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>
