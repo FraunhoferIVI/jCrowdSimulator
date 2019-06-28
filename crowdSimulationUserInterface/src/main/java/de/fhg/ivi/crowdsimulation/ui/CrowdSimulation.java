@@ -6,6 +6,7 @@ import java.awt.ScrollPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -368,6 +369,19 @@ public class CrowdSimulation extends JFrame
                 JOptionPane.WARNING_MESSAGE);
             logger.debug("CrowdSimulation.loadInitialData(), ", e);
         }
+        catch (RuntimeException e)
+        {
+            if (e.getCause() instanceof FileNotFoundException)
+                logger.debug("default data not completely available.");
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.debug("default data not completely available.");
+        }
+        catch (IOException e)
+        {
+            logger.debug("error reading default data.", e);
+        }
     }
 
     /**
@@ -387,7 +401,7 @@ public class CrowdSimulation extends JFrame
      * @throws CrowdSimulatorNotValidException
      */
     public void loadBoundaries(File file, boolean ignoreInvalid)
-        throws CrowdSimulatorNotValidException
+        throws CrowdSimulatorNotValidException, RuntimeException, FileNotFoundException, IOException
     {
         if (file == null)
         {
@@ -446,7 +460,8 @@ public class CrowdSimulation extends JFrame
      * @throws CrowdSimulatorNotValidException
      */
     public void loadCrowdAndRoute(File pedestriansFile, File routeFile, Color crowdColor,
-        boolean ignoreInvalid) throws CrowdSimulatorNotValidException
+        boolean ignoreInvalid)
+        throws CrowdSimulatorNotValidException, RuntimeException, FileNotFoundException, IOException
     {
         // do nothing if no file has been chosen
         if (pedestriansFile == null)

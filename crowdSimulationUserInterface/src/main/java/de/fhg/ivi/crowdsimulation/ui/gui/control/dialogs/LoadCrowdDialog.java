@@ -8,6 +8,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -286,6 +288,19 @@ public class LoadCrowdDialog extends JDialog implements ActionListener
                 if (validateStrict)
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Warning",
                         JOptionPane.WARNING_MESSAGE);
+            }
+            catch (RuntimeException ex)
+            {
+                if (ex.getCause() instanceof FileNotFoundException)
+                    logger.debug("file not found.");
+            }
+            catch (FileNotFoundException ex)
+            {
+                logger.debug("file not found.");
+            }
+            catch (IOException ex)
+            {
+                logger.debug("error reading file.", e);
             }
             dispose();
         }

@@ -1,6 +1,8 @@
 package de.fhg.ivi.crowdsimulation.ui.gui.control.actions.io;
 
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.Action;
 import javax.swing.JOptionPane;
@@ -31,8 +33,7 @@ public class LoadBoundary extends AbstractAction
     /**
      * Uses the object logger for printing specific messages in the console.
      */
-    private static final Logger logger           = LoggerFactory
-        .getLogger(LoadBoundary.class);
+    private static final Logger logger           = LoggerFactory.getLogger(LoadBoundary.class);
 
     /**
      * the name and the short description of this action
@@ -79,6 +80,19 @@ public class LoadBoundary extends AbstractAction
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Warning",
                     JOptionPane.WARNING_MESSAGE);
             logger.debug("BoundaryLoadAction.actionPerformed(), ", ex);
+        }
+        catch (RuntimeException ex)
+        {
+            if (ex.getCause() instanceof FileNotFoundException)
+                logger.debug("file not found.");
+        }
+        catch (FileNotFoundException ex)
+        {
+            logger.debug("shapefile not found.");
+        }
+        catch (IOException ex)
+        {
+            logger.debug("error reading file.", ex);
         }
     }
 }

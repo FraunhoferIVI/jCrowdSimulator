@@ -61,6 +61,7 @@ public class DataTools
      * @return {@link List} of {@link Geometry} objects
      */
     public static List<Geometry> loadGeometriesFromFile(@Nonnull File file)
+        throws RuntimeException, FileNotFoundException, IOException
     {
         List<Geometry> geometries = null;
 
@@ -89,6 +90,7 @@ public class DataTools
      * @return {@link List} of {@link Geometry} objects
      */
     public static List<Geometry> loadGeometriesFromCsvFile(@Nonnull File file)
+        throws RuntimeException, FileNotFoundException, IOException
     {
         ArrayList<Geometry> loadedGeometries = new ArrayList<>();
         WKTReader reader = new WKTReader();
@@ -114,19 +116,6 @@ public class DataTools
             }
             csvReader.close();
         }
-        catch (RuntimeException e)
-        {
-            if (e.getCause() instanceof FileNotFoundException)
-                logger.debug("csv file not found {}", file.getAbsolutePath());
-        }
-        catch (FileNotFoundException e)
-        {
-            logger.debug("csv file not found {}", file.getAbsolutePath());
-        }
-        catch (IOException e)
-        {
-            logger.debug("error reading csv file {}", file.getAbsolutePath(), e);
-        }
         finally
         {
             if (csvReader != null)
@@ -147,45 +136,30 @@ public class DataTools
      * @return {@link List} of {@link Geometry} objects
      */
     public static List<Geometry> loadGeometriesFromShapeFile(@Nonnull File file)
+        throws RuntimeException, FileNotFoundException, IOException
     {
         ArrayList<Geometry> loadedGeometries = null;
-        try
+        loadedGeometries = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", file.toURI().toURL());
+        DataStore dataStore = DataStoreFinder.getDataStore(map);
+        String typeName = dataStore.getTypeNames()[0];
+
+        FeatureSource<SimpleFeatureType, SimpleFeature> source = dataStore
+            .getFeatureSource(typeName);
+        // int srid = CRS.lookupEpsgCode(source.getSchema().getCoordinateReferenceSystem(),
+        // false);
+        FeatureCollection<SimpleFeatureType, SimpleFeature> collection = source.getFeatures();
+
+        try (FeatureIterator<SimpleFeature> features = collection.features())
         {
-            loadedGeometries = new ArrayList<>();
-            Map<String, Object> map = new HashMap<>();
-            map.put("url", file.toURI().toURL());
-            DataStore dataStore = DataStoreFinder.getDataStore(map);
-            String typeName = dataStore.getTypeNames()[0];
-
-            FeatureSource<SimpleFeatureType, SimpleFeature> source = dataStore
-                .getFeatureSource(typeName);
-            // int srid = CRS.lookupEpsgCode(source.getSchema().getCoordinateReferenceSystem(),
-            // false);
-            FeatureCollection<SimpleFeatureType, SimpleFeature> collection = source.getFeatures();
-
-            try (FeatureIterator<SimpleFeature> features = collection.features())
+            while (features.hasNext())
             {
-                while (features.hasNext())
-                {
-                    SimpleFeature feature = features.next();
-                    Object object = feature.getAttribute("the_geom");
-                    Geometry geometry = (Geometry) object;
-                    loadedGeometries.add(geometry);
-                }
+                SimpleFeature feature = features.next();
+                Object object = feature.getAttribute("the_geom");
+                Geometry geometry = (Geometry) object;
+                loadedGeometries.add(geometry);
             }
-        }
-        catch (RuntimeException e)
-        {
-            if (e.getCause() instanceof FileNotFoundException)
-                logger.debug("shapefile not found: {}", file.getPath());
-        }
-        catch (FileNotFoundException e)
-        {
-            logger.debug("shapefile not found: {}", file.getPath());
-        }
-        catch (IOException e)
-        {
-            logger.debug("error reading shapefile: {}", file.getPath(), e);
         }
 
         return loadedGeometries;
