@@ -1,6 +1,7 @@
 package de.fhg.ivi.crowdsimulation.io;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ import org.geotools.data.FeatureSource;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.referencing.CRS;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.FactoryException;
@@ -23,9 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.csvreader.CsvReader;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 
 /**
  * Class for providing helping methods in case of data-processing use cases. There are several
@@ -109,20 +110,30 @@ public class DataTools
 
             while (csvReader.readRecord())
             {
+                String wkt = csvReader.get("WKT");
                 try
                 {
-                    loadedGeometries.add(reader.read(csvReader.get("WKT")));
+                    loadedGeometries.add(reader.read(wkt));
                 }
                 catch (ParseException ex)
                 {
-                    logger.error("loadGeometriesFromCsvFile(), ", ex);
+                    logger.warn("wkt could not be parsed. WKT=", wkt, ex);
                 }
             }
             csvReader.close();
         }
+        catch (RuntimeException e)
+        {
+            if (e.getCause() instanceof FileNotFoundException)
+                logger.debug("csv file not found:", file == null ? "null" : file.getAbsolutePath());
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.debug("csv file not found:", file.getAbsolutePath());
+        }
         catch (IOException e)
         {
-            logger.debug("loadGeometriesFromCsvFile(), " + "no file found", e);
+            logger.debug("error reading csv file:", file.getAbsolutePath(), e);
         }
         finally
         {
@@ -171,9 +182,19 @@ public class DataTools
                 }
             }
         }
-        catch (Exception e)
+        catch (RuntimeException e)
         {
-            logger.debug("loadGeometriesFromShapeFile(), Exception=", e);
+            if (e.getCause() instanceof FileNotFoundException)
+                logger.debug("shapefile not found:",
+                    file == null ? "null" : file.getAbsolutePath());
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.debug("shapefile not found:", file.getAbsolutePath());
+        }
+        catch (IOException e)
+        {
+            logger.debug("error reading shapefile:", file.getAbsolutePath(), e);
         }
 
         return loadedGeometries;
@@ -203,7 +224,7 @@ public class DataTools
             }
             catch (Exception e)
             {
-                logger.debug("loadGeometriesFromShapeFile(), Exception=", e);
+                logger.debug("could not retrieve crs from shapefile", e);
             }
         }
 
@@ -228,7 +249,7 @@ public class DataTools
         }
         catch (FactoryException e)
         {
-            logger.error("DataTools.getCRSFromGeometry(), unknown srid=" + srid, e);
+            logger.error("unknown srid=" + srid, e);
         }
 
         return crs;
