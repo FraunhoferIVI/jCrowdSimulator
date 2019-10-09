@@ -3,7 +3,6 @@ package de.fhg.ivi.crowdsimulation.ui.extension;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -25,11 +24,11 @@ public class VisualCrowdSimulator extends CrowdSimulator<VisualCrowd>
     /**
      * Constructor.
      * <p>
-     * Calls super constructor of {@link CrowdSimulator#CrowdSimulator(ThreadPoolExecutor)}.
+     * Calls super constructor of {@link CrowdSimulator#CrowdSimulator()}.
      */
-    public VisualCrowdSimulator(ThreadPoolExecutor threadPool)
+    public VisualCrowdSimulator()
     {
-        super(threadPool);
+        super();
     }
 
     /**

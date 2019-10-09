@@ -5,18 +5,19 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.locationtech.jts.algorithm.ConvexHull;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opensphere.geometry.algorithm.ConcaveHull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.locationtech.jts.algorithm.ConvexHull;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 
 import de.fhg.ivi.crowdsimulation.analysis.Grid;
 import de.fhg.ivi.crowdsimulation.boundaries.Boundary;
@@ -110,7 +111,12 @@ public class CrowdSimulator<T extends ICrowd> implements Runnable
     /**
      * Boolean parameter which denotes whether the thread for the simulation is running or not.
      */
-    private boolean                   simulationThreadRunning                                = false;
+    private final AtomicBoolean       isSimulationRunning;
+
+    /**
+     * Thread that runs the individual simulation steps.
+     */
+    private Thread                    simulationControlThread;
 
     /**
      * A "Clock" which can speed up (or speed down) the simulation.
@@ -300,26 +306,11 @@ public class CrowdSimulator<T extends ICrowd> implements Runnable
     /**
      * Constructor.
      * <p>
-     * Creates a new {@link CrowdSimulator} without a {@link ThreadPoolExecutor}.
-     * <p>
-     * Initializes {@link List} of {@link WayPoint}, {@link List} of {@link Crowd},
-     * {@link FastForwardClock}, {@link ForceModel}, {@link NumericIntegrator} and {@link Quadtree}.
+     * Initializes the {@link FastForwardClock}, {@link ForceModel}, {@link NumericIntegrator} and
+     * {@link Quadtree} and the {@link #threadPool} that allows parallel processing of the movement
+     * calculation of the {@link Pedestrian} objects.
      */
     public CrowdSimulator()
-    {
-        this(null);
-    }
-
-    /**
-     * Constructor.
-     * <p>
-     * Initializes {@link List} of {@link WayPoint}, {@link List} of {@link Crowd},
-     * {@link FastForwardClock}, {@link ForceModel}, {@link NumericIntegrator} and {@link Quadtree}.
-     *
-     * @param threadPool allows parallel processing of the movement calculation of the
-     *            {@link Pedestrian}. If {@code null} no parallelization is applied
-     */
-    public CrowdSimulator(ThreadPoolExecutor threadPool)
     {
         fastForwardClock = new FastForwardClock();
 
@@ -329,7 +320,6 @@ public class CrowdSimulator<T extends ICrowd> implements Runnable
 
         numericIntegrator = new SemiImplicitEulerIntegrator();
         quadtree = new Quadtree();
-        this.threadPool = threadPool;
         routeFactory = new RouteFactory(quadtree);
         crowdFactory = new CrowdFactory(numericIntegrator, forceModel, quadtree, threadPool);
 
@@ -340,6 +330,8 @@ public class CrowdSimulator<T extends ICrowd> implements Runnable
         standardDeviationOfNormalDesiredVelocity = DEFAULT_STANDARD_DEVIATION_OF_NORMAL_DESIRED_VELOCITY;
         meanMaximumDesiredVelocity = DEFAULT_MEAN_MAXIMUM_DESIRED_VELOCITY;
         standardDeviationOfMaximumDesiredVelocity = DEFAULT_STANDARD_DEVIATION_OF_MAXIMUM_DESIRED_VELOCITY;
+
+        isSimulationRunning = new AtomicBoolean(false);
 
         logger.info("crowdsimlib version=" + getVersion());
     }
@@ -414,32 +406,53 @@ public class CrowdSimulator<T extends ICrowd> implements Runnable
     }
 
     /**
-     * Gets {@code true} if simulationThread is running.
-     *
-     * @return if the thread is running (true) or not (false)
+     * Starts the simulation
      */
-    public boolean isSimulationThreadRunning()
+    public synchronized void start()
     {
-        return simulationThreadRunning;
+        if (simulationControlThread != null && simulationControlThread.isAlive())
+            return;
+
+        // If necessary - how to prioritize Threads + give highest priority to ui thread using this
+        // (only necessary, if graphics thread seems to get slow due to parallelization):
+        // https://funofprograming.wordpress.com/2016/10/08/priorityexecutorservice-for-java/
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        logger.info("crowdsimlib version = " + getVersion() + ", available processors="
+            + availableProcessors);
+        this.threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(availableProcessors);
+
+        simulationControlThread = new Thread(this);
+        isSimulationRunning.set(true);
+        simulationControlThread.start();
     }
 
     /**
-     * Sets {@link #simulationThreadRunning} true, if {@code simulationThreadRunning} is
-     * {@code true}.
-     *
-     * @param simulationThreadRunning {@link Boolean} value if the thread is running (true) or not
-     *            (false)
+     * Stops the simulations
      */
-    public void setSimulationThreadRunning(boolean simulationThreadRunning)
+    public void stop()
     {
-        this.simulationThreadRunning = simulationThreadRunning;
+        isSimulationRunning.set(false);
+        if (threadPool != null)
+            threadPool.shutdown();
     }
 
     /**
-     * Checks, if rendering is currently in progress.
+     * Test, if the simulation that is performing the individual simulation steps is currently
+     * running.
      *
-     * @return {@code true}, if simulation computations are currently in progress, {@code false}
-     *         otherwise
+     * @return {@code true}, if the simulation that is performing the individual simulation steps is
+     *         currently running, {@code false} otherwise.
+     */
+    public boolean isSimulationRunning()
+    {
+        return isSimulationRunning.get();
+    }
+
+    /**
+     * Checks, if computations needed for an individual simulation step are currently in progress.
+     *
+     * @return {@code true}, if computations needed for an individual simulation step are currently
+     *         in progress, {@code false} otherwise
      */
     public boolean isSimulatingInProgress()
     {
@@ -1039,7 +1052,7 @@ public class CrowdSimulator<T extends ICrowd> implements Runnable
     {
         startSimulationTime = fastForwardClock.currentTimeMillis(fastForwardFactor);
 
-        while (simulationThreadRunning)
+        while (isSimulationRunning.get())
         {
             logger.trace("CrowdSimulator.run(), fastForwardFactor=" + fastForwardFactor);
 

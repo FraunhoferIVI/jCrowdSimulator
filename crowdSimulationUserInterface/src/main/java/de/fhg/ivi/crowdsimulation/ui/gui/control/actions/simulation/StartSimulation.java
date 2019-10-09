@@ -52,9 +52,9 @@ public class StartSimulation extends AbstractAction
         crowdSimulator.resumeSimulation();
 
         // fresh start of simulation if the simulation is not running
-        if ( !crowdSimulator.isSimulationThreadRunning())
+        if ( !crowdSimulator.isSimulationRunning())
         {
-            crowdSimulation.startSimulationThread();
+            crowdSimulation.startSimulation();
         }
         if ( !map.isGraphicsThreadRunning())
         {

@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -52,11 +50,13 @@ import de.fhg.ivi.crowdsimulation.validate.ValidationTools;
 /**
  * Main class of the simulation.
  * <p>
- * Three {@link Thread}s were invoked in this class for parallel running activities. The
- * {@link #simulationThread} providing the simulation part of the application, see
- * {@link CrowdSimulator}, the {@link #graphicsThread} providing a thread for the display of the
- * graphic, see {@link Map}, and the {@link #infoThread}, which provides a thread for the output of
- * informations on the state of the simulation, see {@link InfoBar}.
+ * This class creates 2 {@link Thread}s to run parallel activities. The {@link #graphicsThread}
+ * providing a thread for the display of the graphic, see {@link Map}, and the {@link #infoThread},
+ * which provides a thread for the output of informations on the state of the simulation, see
+ * {@link InfoBar}.
+ * <p>
+ * Besides that this class can control a {@link CrowdSimulator} object that is capable to run a
+ * simulation.
  * <p>
  * Furthermore all parts of the GUI are invoked in this class and added to the
  * {@link ComponentManager}, which manages these classes.
@@ -87,11 +87,6 @@ public class CrowdSimulation extends JFrame
     private VisualCrowdSimulator crowdSimulator;
 
     /**
-     * Threading for simulation purposes (for the pedestrian calculations).
-     */
-    private Thread               simulationThread;
-
-    /**
      * Threading for implementation/drawing of graphics.
      */
     private Thread               graphicsThread;
@@ -100,11 +95,6 @@ public class CrowdSimulation extends JFrame
      * Threading for informations in the {@link InfoBar}.
      */
     private Thread               infoThread;
-
-    /**
-     * Thread Pool for parallelization of Pedestrian movement computation
-     */
-    private ThreadPoolExecutor   threadPool;
 
     /**
      * This object represents the "Map" class, this means the part in which buildings, waypoints,
@@ -134,16 +124,8 @@ public class CrowdSimulation extends JFrame
      */
     public CrowdSimulation()
     {
-        // If necessary - how to prioritize Threads + give highest priority to ui thread using this
-        // (only necessary, if graphics thread seems to get slow due to parallelization):
-        // https://funofprograming.wordpress.com/2016/10/08/priorityexecutorservice-for-java/
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
-        logger.info("crowdsimui version = " + getVersion() + ", available processors="
-            + availableProcessors);
-        threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(availableProcessors);
-
         // initialize crowd simulator
-        crowdSimulator = new VisualCrowdSimulator(threadPool);
+        crowdSimulator = new VisualCrowdSimulator();
 
         // creating geometries for GUI
         loadInitialData();
@@ -198,9 +180,7 @@ public class CrowdSimulation extends JFrame
                 {
                     stopGraphicsThread();
                     stopInfoThread();
-                    stopSimulationThread();
-                    if (threadPool != null)
-                        threadPool.shutdown();
+                    stopSimulation();
                     System.exit(0);
                 }
             });
@@ -217,12 +197,11 @@ public class CrowdSimulation extends JFrame
     }
 
     /**
-     * Proofs whether all conditions or preconditions, for the start of the simulation, are
-     * fulfilled.
+     * Proofs whether all preconditions for the start of the simulation are fulfilled.
      * <p>
-     * If conditions are fulfilled the {@link #simulationThread} will started.
+     * If conditions are fulfilled the {@link #crowdSimulator} is started to start the simulation.
      */
-    public void startSimulationThread()
+    public void startSimulation()
     {
         try
         {
@@ -240,9 +219,7 @@ public class CrowdSimulation extends JFrame
             }
 
             // starts the thread for the simulation itself
-            simulationThread = new Thread(crowdSimulator);
-            simulationThread.start();
-            crowdSimulator.setSimulationThreadRunning(true);
+            crowdSimulator.start();
         }
         catch (CrowdSimulatorNotValidException e)
         {
@@ -253,22 +230,22 @@ public class CrowdSimulation extends JFrame
     }
 
     /**
-     * Stops the {@link #simulationThread}.
+     * Stops the {@link #crowdSimulator} to run the simulation.
      */
-    public void stopSimulationThread()
+    public void stopSimulation()
     {
-        crowdSimulator.setSimulationThreadRunning(false);
+        crowdSimulator.stop();
         crowdSimulator.setLastSimulationTime(0);
     }
 
     /**
-     * Starts the {@link #graphicsThread}, but only in the case, that the {@link #simulationThread}
-     * is running too.
+     * Starts the {@link #graphicsThread}, but only in the case, that the simulation is running. is
+     * running too.
      */
     public void startGraphicsThread()
     {
         // only start the graphics
-        if (crowdSimulator.isSimulationThreadRunning())
+        if (crowdSimulator.isSimulationRunning())
         {
             graphicsThread = new Thread(map);
             graphicsThread.start();
@@ -538,6 +515,7 @@ public class CrowdSimulation extends JFrame
     public static void main(String[] args)
     {
         // set system look and feel (adapts the look of java to the systems default look)
+        System.out.println("CrowdSimulation.main()");
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -64,7 +64,7 @@ public class StopAndClear extends AbstractAction
         try
         {
             crowdSimulation.stopGraphicsThread();
-            crowdSimulation.stopSimulationThread();
+            crowdSimulation.stopSimulation();
 
             while (map.isRenderingInProgress() || crowdSimulator.isSimulatingInProgress())
             {

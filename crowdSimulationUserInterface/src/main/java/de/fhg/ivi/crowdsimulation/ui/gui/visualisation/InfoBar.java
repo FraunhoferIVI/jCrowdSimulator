@@ -32,8 +32,7 @@ public class InfoBar extends JPanel implements Runnable
     /**
      * Uses the object logger for printing specific messages in the console.
      */
-    private static final Logger logger              = LoggerFactory
-        .getLogger(InfoBar.class);
+    private static final Logger logger              = LoggerFactory.getLogger(InfoBar.class);
 
     /**
      * default serial version ID
@@ -152,8 +151,8 @@ public class InfoBar extends JPanel implements Runnable
     }
 
     /**
-     * Thread for {@link InfoBar} class. Thread is running if
-     * {@link InfoBar#infoThreadRunning}} is true.
+     * Thread for {@link InfoBar} class. Thread is running if {@link InfoBar#infoThreadRunning}} is
+     * true.
      * <p>
      * Through the thread the values for the {@link JLabel} can be updated automatically.
      *
@@ -188,7 +187,7 @@ public class InfoBar extends JPanel implements Runnable
             long currentTime = System.nanoTime();
 
             // write whether simulation thread is running
-            boolean simulationRunning = crowdSimulator.isSimulationThreadRunning();
+            boolean simulationRunning = crowdSimulator.isSimulationRunning();
 
             if (simulationRunning)
             {
@@ -251,8 +250,8 @@ public class InfoBar extends JPanel implements Runnable
                     + " ms");
 
                 // write graphic refresh per second
-                graphicRefreshLabel.setText("graphic refreshs/second="
-                    + Math.round(map.getGraphicRefreshsPerSecond()));
+                graphicRefreshLabel.setText(
+                    "graphic refreshs/second=" + Math.round(map.getGraphicRefreshsPerSecond()));
             }
 
             // set last info refresh time
