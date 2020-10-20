@@ -71,7 +71,23 @@
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-main</artifactId>
 			<version>${geotools.version}</version>
+			<!--
+			<exclusions>
+				<exclusion>
+				      <groupId>org.geotools</groupId>
+				      <artifactId>gt-referencing</artifactId>
+				</exclusion>
+			</exclusions>
+			-->
 		</dependency>
+		
+		<!--
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-epsg-hsql</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		-->
 
 		<!-- https://mvnrepository.com/artifact/org.geotools/gt-shapefile -->
 		<!-- ESRI Shapefile input/output -->
