@@ -7,7 +7,7 @@
 
 	<groupId>de.fhg.ivi.crowdsimulation</groupId>
 	<artifactId>crowdsimui1</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>de.fhg.ivi.crowdsimulation</groupId>
 			<artifactId>crowdsimlib1</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.github.jiconfont/jiconfont -->
