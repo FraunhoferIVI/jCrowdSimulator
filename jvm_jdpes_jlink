@@ -1,0 +1,5 @@
+jdeps --module-path /jdk/lib --ignore-missing-deps --multi-release 12 --list-deps "jCrowdSimulator.jar"
+
+jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules java.base,java.desktop/sun.awt.image,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,jdk8internals/com.sun.image.codec.jpeg,jdk8internals/sun.awt.image.codec,jdk8internals/sun.reflect --output java-runtime
+
+jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml --output java-runtime
